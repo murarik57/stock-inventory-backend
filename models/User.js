@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 const UserSchema = new Schema({
   name: {
@@ -27,4 +29,4 @@ const UserSchema = new Schema({
   },
 });
 
-module.exports = User = mongooose.model("user", UserSchema);
+module.exports = User = mongoose.model("user", UserSchema);
