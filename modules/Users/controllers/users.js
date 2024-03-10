@@ -1,9 +1,11 @@
 const User = require("../../../models/User");
 const Role = require("../../../models/Role");
+const Company = require("../../../models/Company");
+const Product = require("../../../models/Product");
 const common = require("../../../utils/commonFunctions");
 
 const userController = {
-  getAllUsers: async (req, res, next) => {
+  getAllUsers: async (req, res) => {
     try {
       const users = await User.find({}, { password: 0 }).populate([
         {
@@ -29,9 +31,11 @@ const userController = {
   createUser: async (req, res, next) => {
     const { name, email, password, role_id } = req.body;
     if (!name || !email || !password || !role_id) {
-      return res
-        .status(400)
-        .json({ message: "All fields are required", success: false });
+      return res.status(400).json({
+        status: 400,
+        message: "All fields are required",
+        success: false,
+      });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,7 +51,11 @@ const userController = {
 
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ message: "Email is already registered" });
+        return res.status(400).json({
+          success: false,
+          status: 400,
+          message: "Email is already registered",
+        });
       }
 
       if (password.length < 4) {
@@ -102,13 +110,25 @@ const userController = {
           .status(404)
           .json({ success: false, status: 404, message: "User not found" });
       }
+
+      const options = {};
+      if (req.auth.user?.role_id?.role_type === "MERCHANT")
+        options.createdBy = id;
+
+      const companiesCount = await Company.countDocuments(options);
+      const productsCount = await Product.countDocuments(options);
+
       let response = {
         meta: {
           success: true,
           status: 200,
           message: "User Profile Success",
         },
-        data: user,
+        data: {
+          user,
+          companiesCount,
+          productsCount,
+        },
       };
 
       res.json(response);

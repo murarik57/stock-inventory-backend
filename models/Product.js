@@ -18,6 +18,16 @@ const ProductSchema = new Schema({
     required: true,
     default: 0,
   },
+  active: {
+    type: Boolean,
+    default: true,
+    required: false,
+  },
+  status: {
+    type: Boolean,
+    default: true,
+    required: false,
+  },
   createdBy: { type: Schema.Types.ObjectId, ref: "users" },
   company: { type: Schema.Types.ObjectId, ref: "companies" },
   createdAt: {
