@@ -17,7 +17,9 @@ const corsOption = {
 app.use(helmet());
 app.use(cors(corsOption));
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+
+app.use("/uploads", express.static("uploads"));
 
 //================== Routes =========================
 const base_url = process.env.API_ENDPOINT;
@@ -25,7 +27,7 @@ let arr = [];
 arr.push(base_url + "users*");
 arr.push(base_url + "roles*");
 arr.push(base_url + "products*");
-arr.push(base_url + "companies*");
+arr.push(base_url + "orders*");
 
 app.all(arr, [validate.validateToken]);
 

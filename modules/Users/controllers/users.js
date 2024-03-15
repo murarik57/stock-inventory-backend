@@ -1,6 +1,6 @@
 const User = require("../../../models/User");
 const Role = require("../../../models/Role");
-const Company = require("../../../models/Company");
+const Order = require("../../../models/Order");
 const Product = require("../../../models/Product");
 const common = require("../../../utils/commonFunctions");
 
@@ -115,7 +115,7 @@ const userController = {
       if (req.auth.user?.role_id?.role_type === "MERCHANT")
         options.createdBy = id;
 
-      const companiesCount = await Company.countDocuments(options);
+      const ordersCount = await Order.countDocuments(options);
       const productsCount = await Product.countDocuments(options);
 
       let response = {
@@ -126,7 +126,7 @@ const userController = {
         },
         data: {
           user,
-          companiesCount,
+          ordersCount,
           productsCount,
         },
       };

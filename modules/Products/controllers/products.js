@@ -1,37 +1,25 @@
 const mongoose = require("mongoose");
 const Product = require("../../../models/Product");
-const Company = require("../../../models/Company");
+const Order = require("../../../models/Order");
+const dayjs = require("dayjs");
+const utc = require("dayjs/plugin/utc");
+dayjs.extend(utc);
 
 const productController = {
   getAllProduct: async (req, res) => {
     const loggedInUser = req.auth.user;
-    const company = req?.query?.company;
-
-    if (company && !mongoose.Types.ObjectId.isValid(company)) {
-      return res
-        .status(400)
-        .json({ success: false, status: 400, message: "Invalid company ID" });
-    }
 
     try {
       const options = {};
       if (loggedInUser?.role_id?.role_type === "MERCHANT")
         options.createdBy = loggedInUser._id;
-      if (company) {
-        options.company = company;
-      }
 
       const products = await Product.find(options, {
         __v: 0,
         updatedAt: 0,
         createdBy: 0,
-      }).populate([
-        {
-          path: "company",
-          model: Company,
-          select: "_id name",
-        },
-      ]);
+      });
+
       let response = {
         meta: {
           success: true,
@@ -51,14 +39,7 @@ const productController = {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res
         .status(400)
-        .json({ success: false, status: 400, message: "Invalid product ID" })
-        .populate([
-          {
-            path: "company",
-            model: Company,
-            select: "_id name",
-          },
-        ]);
+        .json({ success: false, status: 400, message: "Invalid product ID" });
     }
 
     try {
@@ -66,13 +47,7 @@ const productController = {
         __v: 0,
         updatedAt: 0,
         createdBy: 0,
-      }).populate([
-        {
-          path: "company",
-          model: Company,
-          select: "_id name",
-        },
-      ]);
+      });
 
       if (!product)
         return res
@@ -87,7 +62,7 @@ const productController = {
         },
         data: product,
       };
-      res.json(response);
+      res.status(200).json(response);
     } catch (error) {
       console.log("🔥🔥🔥🔥🔥🔥🔥🔥", error);
       res.status(500).json({ meta: error });
@@ -96,8 +71,8 @@ const productController = {
   createOneProduct: async (req, res) => {
     const loggedInUser = req.auth.user;
     try {
-      const { name, description, quantity, company } = req.body;
-      if (!name || !quantity || !company) {
+      const { name, description, quantity } = req.body;
+      if (!name || !quantity) {
         return res.status(400).json({
           status: 400,
           message: "Missing required required",
@@ -107,7 +82,6 @@ const productController = {
       const newProduct = new Product({
         name,
         quantity,
-        company,
         description,
         createdBy: loggedInUser._id,
       });
@@ -145,11 +119,13 @@ const productController = {
         name,
         description,
         quantity,
+        updatedAt: dayjs.utc().toDate(),
       });
       if (!updatedProduct)
         return res
           .status(404)
           .json({ success: false, status: 404, message: "Product not found" });
+
       res.status(200).json({
         success: true,
         status: 200,
@@ -163,6 +139,7 @@ const productController = {
       res.status(500).json({ meta: error });
     }
   },
+
   deleteOneProduct: async (req, res) => {
     let id = req.params.id;
     if (!mongoose.Types.ObjectId.isValid(id)) {

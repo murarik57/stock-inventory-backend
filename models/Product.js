@@ -29,7 +29,6 @@ const ProductSchema = new Schema({
     required: false,
   },
   createdBy: { type: Schema.Types.ObjectId, ref: "users" },
-  company: { type: Schema.Types.ObjectId, ref: "companies" },
   createdAt: {
     type: Date,
     default: dayjs.utc().format(),
