@@ -17,14 +17,12 @@ const authController = {
       ]);
 
       if (!user) {
-        return res.status(400).json({ errors: [{ msg: "Email not found" }] });
+        return res.status(400).json({ message: "Email not found" });
       }
       const isMatch = await common.isValidPassword(password, user);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Incorrect Password" }] });
+        return res.status(400).json({ message: "Incorrect Password" });
       }
 
       let token = createLocalToken(user);
@@ -36,7 +34,7 @@ const authController = {
       });
     } catch (err) {
       console.log("👌👌👌👌👌👌👌👌👌👌👌👌", err);
-      res.status(500).json({ meta: err });
+      res.status(500).json({ message: err?.message });
     }
   },
 };
