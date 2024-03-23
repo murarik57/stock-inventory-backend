@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Product = require("../../../models/Product");
-const Order = require("../../../models/Order");
 const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
@@ -18,7 +17,7 @@ const productController = {
         __v: 0,
         updatedAt: 0,
         createdBy: 0,
-      });
+      }).sort({ createdAt: -1 });
 
       let response = {
         meta: {

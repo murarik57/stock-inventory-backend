@@ -10,7 +10,9 @@ const orderController = {
       if (loggedInUser?.role_id?.role_type === "MERCHANT")
         options.createdBy = loggedInUser._id;
 
-      const companies = await Order.find(options, { __v: 0, invoice: 0 });
+      const companies = await Order.find(options, { __v: 0, invoice: 0 }).sort({
+        createdAt: -1,
+      });
       let response = {
         meta: {
           success: true,

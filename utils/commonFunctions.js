@@ -6,8 +6,8 @@ const common = {
     let token = req.headers["x-access-token"] || req.headers["authorization"];
     if (typeof token === "undefined") {
       console.log("No authorization header");
-      res.json({
-        status: 401,
+      res.status(401).json({
+        status: 5000,
         message: "No Token",
       });
     } else {
@@ -17,8 +17,8 @@ const common = {
         return new Promise((resolve, reject) => {
           jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
             if (err) {
-              res.json({
-                status: 401,
+              res.status(401).json({
+                status: 5000,
                 success: false,
                 message: err?.message ?? "Invalid token",
               });
@@ -30,8 +30,8 @@ const common = {
           });
         });
       } else {
-        res.json({
-          status: 401,
+        res.status(401).json({
+          status: 5000,
           success: false,
           message: "Token Error",
         });

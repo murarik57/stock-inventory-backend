@@ -32,6 +32,7 @@ const ProductSchema = new Schema({
   createdAt: {
     type: Date,
     default: dayjs.utc().format(),
+    index: true,
   },
   updatedAt: {
     type: Date,

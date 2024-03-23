@@ -31,6 +31,7 @@ const OrderSchema = new Schema({
   createdAt: {
     type: Date,
     default: dayjs.utc().format(),
+    index: true,
   },
 });
 
