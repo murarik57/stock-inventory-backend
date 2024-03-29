@@ -56,4 +56,10 @@ module.exports = (router) => {
     handleMulterError,
     order.createOneOrders
   );
+  router.put(
+    "/orders/:id",
+    upload.single("invoice"),
+    handleMulterError,
+    order.uploadInvoice
+  );
 };
