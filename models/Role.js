@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-dayjs.extend(utc);
 
 const RoleSchema = new Schema({
   name: {
@@ -21,11 +18,11 @@ const RoleSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: dayjs.utc().format(),
+    default: new Date().toISOString(),
   },
   updatedAt: {
     type: Date,
-    default: dayjs.utc().format(),
+    default: new Date().toISOString(),
   },
 });
 

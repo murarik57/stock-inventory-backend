@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-dayjs.extend(utc);
 
 const ProductSchema = new Schema({
   _id: { type: Schema.Types.ObjectId, ref: "Product" },
@@ -30,8 +27,7 @@ const OrderSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: dayjs.utc().format(),
-    index: true,
+    default: new Date().toISOString(),
   },
 });
 
