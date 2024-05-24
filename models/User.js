@@ -18,11 +18,11 @@ const UserSchema = new Schema({
   role_id: { type: Schema.Types.ObjectId, ref: "roles" },
   createdAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: () => new Date(),
   },
   updatedAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: () => new Date(),
   },
 });
 

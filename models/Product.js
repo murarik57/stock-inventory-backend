@@ -28,11 +28,11 @@ const ProductSchema = new Schema({
   createdBy: { type: Schema.Types.ObjectId, ref: "users" },
   createdAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: () => new Date(),
   },
   updatedAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: () => new Date(),
   },
 });
 

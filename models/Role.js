@@ -18,11 +18,11 @@ const RoleSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: () => new Date(),
   },
   updatedAt: {
     type: Date,
-    default: new Date().toISOString(),
+    default: () => new Date(),
   },
 });
 
